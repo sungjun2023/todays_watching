@@ -1,0 +1,145 @@
+<html lang="en">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>오늘 뭐 볼까?</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cute+Font&display=swap">
+    <link rel="stylesheet" href="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/easygpt/default.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+        <style>
+            h1 {
+         font-family: 'Cute Font', cursive;
+         font-size: 3rem;
+       }
+       body {
+         background-color: #0e0d0d; /* 분홍색 */
+       }
+       .loading {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         font-size: 24px;
+         color: #444;
+         text-align: center;
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-color: #fff;
+         z-index: 9999;
+       }
+       .card {
+         width: 90%; /* 변경: 카드의 너비를 화면 크기에 맞추도록 수정 */
+         max-width: 500px; /* 추가: 카드의 최대 너비를 500px로 설정 */
+         height: 500px;
+         margin: 0 auto;
+         border-radius: 1.5rem;
+         overflow: hidden;
+         margin-top: 2rem;
+         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+       }
+       .card img {
+         max-width: 100%;
+         max-height: 100%;
+         object-fit: cover;
+         border-radius: 1.5rem 1.5rem 0 0;
+       }
+       .card-body {
+         padding: 2rem;
+         text-align: center;
+         background-color: #FFF;
+       }
+       .btn {
+         background-color: #853030; /* 빨간색 */
+         color: #FFF;
+         font-weight: bold;
+         border-radius: 2rem;
+         padding: 1rem 2rem;
+         margin-top: 2rem;
+         border: none;
+       }
+       .btn:hover {
+         background-color: #E57373; /* 연한 빨간색 */
+         transition: background-color 0.2s;
+       }
+       .card:hover {
+         transform: scale(1.05);
+         transition: transform 0.2s;
+       }
+     </style>
+</head>
+<body>
+    <div class="hero text-center bg-white py-3">
+        <h1 class="text-primary fw-bold text-stroke">오늘 뭐 볼까?</h1>
+        <h3 class="text-secondary">선택장애를 위한 ott 선택 서비스</h3>
+    </div>
+<div class="hero text-center bg-white py-3">
+    <h1 class="text-primary fw-bold text-stroke">디즈니 플러스의 호러 작품 추천</h1>
+</div>
+<div class="card-container">
+    <div class="card">
+        <a id="horrorWorks-link" href="" style="text-decoration:none; color: black;">
+            <img id="horrorWorks-image" src="" alt="작품으로 이동">
+            <div class="card-body">
+                <h2 id="horrorWorks-title" class="card-title" style="position: absolute; bottom: 2rem; left: 50%; color: white; transform: translateX(-50%); font-weight: bold;"></h2>
+            </div>
+        </a>
+    </div>
+</div>
+<script>
+  const horrorWorks = [
+    {
+      title: '그림커티',
+      image: 'https://t1.daumcdn.net/movie/cc94af7ba9aed577603920bf4df7a5d8db403f78',
+      link: 'https://www.disneyplus.com/ko-kr/movies/_/51b6oCiUPp76'
+    },
+    {
+      title: '바바리안',
+      image: 'https://i.namu.wiki/i/BnVFIyab0Lp9ZDnA67GS0VzHOxrFQFXKPvG0D7rcHbiUeFUx9vRgOiALDwuBHQU3XJV-mO_nl1rd9aIYseTX5A.webp',
+      link: 'https://www.disneyplus.com/ko-kr/movies/barbarian/242aUmLGGIxR'
+    },
+    {
+      title: '매트리악',
+      image: 'https://i.namu.wiki/i/MD1guGrSC2aBYyAXzgnyRkRxoTurGZpEaqnF5yBl0JgKjWmQiSO2BND4mRy9cJW5aVnX0JjcppsSKkOJYtWiug.webp',
+      link: 'https://www.disneyplus.com/ko-kr/movies/matriarch/1RkvtbbX4t6u'
+    },
+    {
+      title: '앤틀러스',
+      image: 'https://img.extmovie.com/files/attach/images/135/669/757/074/6d8a41163beb70c725273dda556eb1b7.jpg',
+      link: 'https://www.disneyplus.com/ko-kr/movies/antlers/1sOHhsCuqbSU'
+    },
+    {
+      title: '프래시',
+      image: 'https://t1.daumcdn.net/movie/d548df1be67a2f6e18fe2927ed4e7dee7d5ac232',
+      link: 'https://www.disneyplus.com/ko-kr/movies/fresh/6Y65Ul9zqwG6'
+    },
+  ];
+
+  $(document).ready(function() {
+    // "분석 중..." 메시지가 4초 후에 사라지도록 함
+    setTimeout(function() {
+      $('.loading').fadeOut();
+  
+    // 호러 작품 중에서 랜덤으로 선택
+    const randomIndex = Math.floor(Math.random() * horrorWorks.length);
+    const selectedHorrorWork = horrorWorks[randomIndex];
+  
+    // 선택된 작품의 정보를 화면에 표시
+    $('#horrorWorks-title').text(selectedHorrorWork.title);
+    $('#horrorWorks-image').attr('src', selectedHorrorWork.image);
+    $('#horrorWorks-link').attr('href', selectedHorrorWork.link);
+    }, 4000);
+    });
+    </script>
+    <div class="loading text-center">
+        <h3 class="text-secondary">분석 중...</h3>
+    </div>
+    </body>
+</html>

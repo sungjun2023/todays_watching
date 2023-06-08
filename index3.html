@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>오늘 뭐 볼까?</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cute+Font&display=swap">
+    <link rel="stylesheet" href="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/easygpt/default.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+    <style>    
+    body {
+      background-color: #FCE4EC; /* 분홍색 */
+    }
+        .loading-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    }
+         h1 {
+      font-family: 'Cute Font', cursive;
+      font-size: 3rem;
+    }
+    .card {
+         width: 90%; /* 변경: 카드의 너비를 화면 크기에 맞추도록 수정 */
+         max-width: 500px; /* 추가: 카드의 최대 너비를 500px로 설정 */
+         height: 500px;
+         margin: 0 auto;
+         border-radius: 1.5rem;
+         overflow: hidden;
+         margin-top: 2rem;
+         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+       }      
+    .card img {
+      
+  width: 100%; /* 또는 다른 크기로 조절 */
+  height: auto;
+}
+    .card-body {
+      padding: 2rem;
+      text-align: center;
+      background-color: #FFF;
+    }
+    .btn {
+      background-color: #D32F2F; /* 빨간색 */
+      color: #FFF;
+      font-weight: bold;
+      border-radius: 2rem;
+      padding: 1rem 2rem;
+      margin-top: 2rem;
+      border: none;
+    }
+
+    .btn:hover {
+      background-color: #E57373; /* 연한 빨간색 */
+      transition: background-color 0.2s;
+    }
+    .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #444;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    z-index: 9999;
+    }
+    .card:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s;
+    }
+.card {
+  width: 500px;
+  height: 500px;
+  margin: 0 auto;
+}
+ </style>
+
+    </head>
+    <body>
+    <div class="hero text-center bg-white py-3">
+        <h1 class="text-primary fw-bold text-stroke">오늘 뭐 볼까?</h1>
+        <h3 class="text-secondary">선택장애를 위한 ott 선택 서비스</h3>
+    </div>
+    <script>
+      const romanceWorks = [
+        {
+          title: '알라딘',
+          image: 'https://play-lh.googleusercontent.com/P_lpOvBqAJY1mUz9WRXmY2thFW_2LJps23gbW9J87zwUWLAMGcku1Dmi0RuO2mA7S_tZ',
+          link: 'https://www.disneyplus.com/ko-kr/movies/aladdin/7n4ZoEyzC6P4'
+        },
+        {
+          title: '셰이프 오브 하트',
+          image: 'https://t1.daumcdn.net/movie/468ea5f60203f0655d6168d17134f6b070740986',
+          link: 'https://www.disneyplus.com/ko-kr/movies/the-little-mermaid/7hM9XfGe5a5Q'
+        },
+        {
+          title: '라라랜드',
+          image: 'https://t1.daumcdn.net/movie/0e371de6f342a66143c49af3dd2b204342bbb5aa',
+          link: 'https://www.disneyplus.com/ko-kr/movies/la-la-land/7ayXZKE5dfKj'
+        },
+        {
+            title: '사랑이라 말해요',
+            image: 'https://th.bing.com/th/id/OIP.tehCW4O4plbexfyceQdIfwGQJY?pid=ImgDet&rs=1',
+            link: 'https://www.disneyplus.com/ko-kr/series/call-it-love/3IR3Vo2mCd4s'
+        },
+        {
+            title: '라푼젤',
+            image: 'https://t1.daumcdn.net/cfile/tistory/997BE6405C4AA95218',
+            link: 'https://www.disneyplus.com/ko-kr/movies/tangled/3V3ALy4SHStq'
+        },
+        {
+            title:'사랑과 탄환',
+            image:'https://upload.filesun.com/bbsdisk/2022/10/30/1030_7051_1667091396.jpg',
+            link:'https://www.disneyplus.com/ko-kr/series/yakuza-lover/qdY4BhCWdvwU'
+        },
+        {
+            title:'링크',
+            image:'data:image/jpeg;base64,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',
+            link:'https://www.disneyplus.com/ko-kr/series/link-eat-love-kill/5JLdEae6PO66'
+        },
+        {
+            title:'다시, 우리(단편)',
+            image:'https://th.bing.com/th/id/OIP.MvGHj1hmcYYyBylFTDcuPAHaHa?pid=ImgDet&rs=1',
+            link:'https://www.disneyplus.com/ko-kr/movies/us-again/3KPeVueXrxck'
+        },
+        {
+            title:'러브, 사이먼',
+            image:'https://th.bing.com/th/id/OIP.4-d3cVkA-OBAOjMt3tRKpQHaK8?pid=ImgDet&rs=1',
+            link:'https://www.disneyplus.com/ko-kr/movies/love-simon/iOs6PVflB9Ng'
+        },
+        { 
+            title:'안녕, 헤이즐',
+            image:'https://th.bing.com/th/id/OIP.2GhEKpdl-JNscMdCUTvB_wHaKU?pid=ImgDet&rs=1',
+            link:'https://www.disneyplus.com/ko-kr/movies/the-fault-in-our-stars/54mG9tD7cU2q'
+        },
+        {
+            title:'로잘린',
+            image:'https://www.unekjc.com/wp-content/uploads/2022/10/rosaline1.jpg',
+            link:'https://www.disneyplus.com/ko-kr/movies/rosaline/5zkOzdpRcfyN'
+        }
+        // 이곳에 더 많은 로맨스 작품 정보를 추가할 수 있습니다.
+      ];
+      
+      $(document).ready(function() {
+        // "분석 중..." 메시지가 4초 후에 사라지도록 설정합니다.
+        setTimeout(function() {
+          $('.loading').fadeOut();
+          const randomIndex = Math.floor(Math.random() * romanceWorks.length);
+          const randomRomanceWork = romanceWorks[randomIndex];
+          $('#romanceWorks-image').attr('src', randomRomanceWork.image);
+          $('#romanceWorks-title').text(randomRomanceWork.title);
+          $('#romanceWorks-link').attr('href', randomRomanceWork.link);
+        }, 4000);
+      });
+    </script>
+    <div class="hero text-center bg-white py-3">
+        <h1 class="text-primary fw-bold text-stroke">디즈니 플러스의 로맨스 작품 추천</h1>
+    </div>
+    <div class="card-container">
+      <div class="card">
+        <a id="romanceWorks-link" href="" style="text-decoration:none; color: rgb(10, 10, 10);">
+          <img id="romanceWorks-image" src="" alt="작품으로 이동">
+          <div class="card-body">
+            <a id="romanceWorks-link" href="" style="text-decoration:none; color: rgb(23, 23, 23);">
+                <img id="romanceWorks-image" src="" alt="작품으로 이동">
+            </a>
+            <h2 id="romanceWorks-title" class="card-title" style="position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); font-weight: bold;"></h2>
+        </div>
+      </div>
+            </a>
+        </div>
+    </div>
+    <div class="loading text-center">
+        <h3 class="text-secondary">분석 중...</h3>
+    </div>
+</body>
+
+</html>

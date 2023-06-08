@@ -1,0 +1,148 @@
+<html lang="en">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>오늘 뭐 볼까?</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cute+Font&display=swap">
+    <link rel="stylesheet" href="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/easygpt/default.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+        <style>
+            h1 {
+         font-family: 'Cute Font', cursive;
+         font-size: 3rem;
+       }
+       body {
+         background-color: #f60707; 
+       }
+       .loading {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         font-size: 24px;
+         color: #444;
+         text-align: center;
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-color: #fff;
+         z-index: 9999;
+       }
+       .card {
+         width: 90%; /* 변경: 카드의 너비를 화면 크기에 맞추도록 수정 */
+         max-width: 500px; /* 추가: 카드의 최대 너비를 500px로 설정 */
+         height: 500px;
+         margin: 0 auto;
+         border-radius: 1.5rem;
+         overflow: hidden;
+         margin-top: 2rem;
+         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+       }
+       .card img {
+         max-width: 100%;
+         max-height: 100%;
+         object-fit: cover;
+         border-radius: 1.5rem 1.5rem 0 0;
+       }
+       .card-body {
+         padding: 2rem;
+         text-align: center;
+         background-color: #FFF;
+       }
+       .btn {
+         background-color: #853030; /* 빨간색 */
+         color: #FFF;
+         font-weight: bold;
+         border-radius: 2rem;
+         padding: 1rem 2rem;
+         margin-top: 2rem;
+         border: none;
+       }
+       .btn:hover {
+         background-color: #E57373; /* 연한 빨간색 */
+         transition: background-color 0.2s;
+       }
+       .card:hover {
+         transform: scale(1.05);
+         transition: transform 0.2s;
+       }
+       .netflix-text {
+         color: red;
+         font-family: 'Cute Font', cursive;
+         font-size: 3rem;
+       }
+     </style>
+</head>
+<body>
+    <div class="hero text-center bg-white py-3">
+        <h1 class="text-primary fw-bold text-stroke">오늘 뭐 볼까?</h1>
+        <h3 class="text-secondary">선택장애를 위한 ott 선택 서비스</h3>
+    </div>
+    <div class="hero text-center bg-white py-3">
+        <h1 class="text-primary fw-bold text-stroke"><span class=netflix-text>넷플릭스</span>의 호러 작품 추천</h1>
+<div class="card-container">
+    <div class="card">
+        <a id="horrorWorks-link" href="" style="text-decoration:none; color: black;">
+            <img id="horrorWorks-image" src="" alt="작품으로 이동">
+            <div class="card-body">
+                <h2 id="horrorWorks-title" class="card-title" style="position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); font-weight: bold; color:#efeded "></h2>
+            </div>
+        </a>
+    </div>
+</div>
+<script>
+  const horrorWorks = [
+    {
+      title: '에나벨',
+      image: 'https://mblogthumb-phinf.pstatic.net/MjAxOTA1MjFfMjc5/MDAxNTU4NDMwNzcyODE2.gKJvYVt3TnBjwUpAH6JawwkhS-eYylcnms2zcY7e5osg.lSBmnVMJZLDmMowL0Fe5-uD_nG2qcpQ-KbjktzmTGqgg.JPEG.sulham/%EC%88%98%EC%A0%95%EB%90%A8_%EC%95%A0%EB%82%98%EB%B2%A8_%ED%81%B4%EB%A1%9C%EC%A6%88%EC%97%852.jpg?type=w800',
+      link: 'https://www.netflix.com/kr/title/80013775'
+    },
+    {
+      title: '23 아이덴티티',
+      image: 'https://t1.daumcdn.net/movie/5a6b38773e351ce815eec343a30b35336fbd9f67',
+      link: 'https://www.netflix.com/kr/title/80124506'
+    },
+    {
+      title: '곤지암',
+      image: 'https://an2-img.amz.wtchn.net/image/v2/6ZcRXabtdka8X55ZpmJ6QA.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qZ3dlRFF3TUhFNE1DSmRMQ0p3SWpvaUwzWXhMMnA0YTNKcmNIcGthak5qWjJacGNHUmpZbTl5SW4wLlZrUlU3SGN2NWxmcmQ1UXp0bGx6RTlJR0ZfUVVfWjFuRHI5Y2N3MWp4N3c',
+      link: 'https://www.netflix.com/kr/title/80992149'
+    },
+    {
+      title: '블랙폰',
+      image: 'https://t1.daumcdn.net/movie/05a6953431a2b8d38271b7ad80bd1e280a13d7f3',
+      link: 'https://www.netflix.com/kr/title/81488656'
+    },
+    {
+      title: '런',
+      image: 'https://i.namu.wiki/i/4BwyUKnsK_R9N4KLQoEzLN9iOQ-rL_k6wtCLuKIwxRiRf41Wag-gV3CkZTBRAmD843kRTvtAmhYVkVAbYpAP8A.webp',
+      link: 'https://www.netflix.com/kr/title/81157374'
+    },
+    {
+      title: '바이오하자드: 인피니트 다크니스',
+      image: 'https://i.namu.wiki/i/9mKZg-nmJ7NdfH9Y8Uj1iovBL8oqwsoMoiymMaiQxIBLhw1OjtprzFuHieenrecNGDWeKULA18jdeHVBWu_icw.webp',
+      link: 'https://www.netflix.com/kr/title/80987064'
+    }
+  ];
+  $(document).ready(function() {
+    // "분석 중..." 메시지가 4초 후에 사라지도록 설정합니다.
+    setTimeout(function() {
+      $('.loading').fadeOut();
+      const randomIndex = Math.floor(Math.random() * horrorWorks.length);
+      const randomHorrorWork = horrorWorks[randomIndex];
+      $('#horrorWorks-image').attr('src', randomHorrorWork.image);
+      $('#horrorWorks-title').text(randomHorrorWork.title);
+      $('#horrorWorks-link').attr('href', randomHorrorWork.link);
+    }, 4000);
+  });
+</script>
+<div class="loading">
+    <p>분석 중...</p>
+</div>
+</body>
+</html>

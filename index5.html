@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>오늘 뭐 볼까?</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cute+Font&display=swap">
+    <link rel="stylesheet" href="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/easygpt/default.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+  <style>
+         h1 {
+      font-family: 'Cute Font', cursive;
+      font-size: 3rem;
+    }
+    body {
+      background-color: #c22b17; /* 분홍색 */
+    }
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: #444;
+      text-align: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      z-index: 9999;
+    }
+    .card {
+         width: 90%; /* 변경: 카드의 너비를 화면 크기에 맞추도록 수정 */
+         max-width: 500px; /* 추가: 카드의 최대 너비를 500px로 설정 */
+         height: 500px;
+         margin: 0 auto;
+         border-radius: 1.5rem;
+         overflow: hidden;
+         margin-top: 2rem;
+         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+       }
+    .card img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: cover;
+      border-radius: 1.5rem 1.5rem 0 0;
+    }
+    .card-body {
+      padding: 2rem;
+      text-align: center;
+      background-color: #FFF;
+    }
+    .btn {
+      background-color: #D32F2F; /* 빨간색 */
+      color: #FFF;
+      font-weight: bold;
+      border-radius: 2rem;
+      padding: 1rem 2rem;
+      margin-top: 2rem;
+      border: none;
+    }
+    .btn:hover {
+      background-color: #E57373; /* 연한 빨간색 */
+      transition: background-color 0.2s;
+    }
+    .card:hover {
+      transform: scale(1.05);
+      transition: transform 0.2s;
+    }
+  </style>
+</head>
+<body>
+<div class="hero text-center bg-white py-3">
+    <h1 class="text-primary fw-bold text-stroke">오늘 뭐 볼까?</h1>
+    <h3 class="text-secondary">선택장애를 위한 ott 선택 서비스</h3>
+</div>
+<script>
+  const actionWorks = [
+    {
+      title: '어벤져스:엔드게임',
+      image: 'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/201904/20/636f604d-1b30-4efc-b0ec-1d7976b4c243.jpg',
+      link: 'https://www.disneyplus.com/ko-kr/movies/marvel-studios-avengers-endgame/aRbVJUb2h2Rf'
+    },
+    {
+      title: '블랙 위도우',
+      image: 'https://m.media-amazon.com/images/I/914MHuDfMSL._AC_SL1500_.jpg',
+      link: 'https://www.disneyplus.com/ko-kr/movies/black-widow/7D8B4PmVAaEs'
+    },
+    {
+      title: '캡틴 아메리카: 시빌 워',
+      image: 'https://mblogthumb-phinf.pstatic.net/20160503_198/the_give_1462277187797tXaKm_JPEG/Marvel-Civil-War-alternate-poster.jpg?type=w800',
+      link: 'https://www.disneyplus.com/ko-kr/movies/captain-america-civil-war/5r56bkrJoQZu'
+    },
+    {
+        title: '스타워즈: 깨어난 포스',
+        image: 'https://i.namu.wiki/i/BXYpFssv9g8xwHr79UlOier5yBXPHnYooIr7e-CGBhN3biuiIphCNA2E2IqMYaMn7cBag7PYUPW3xDn_8Yh5ew.webp',
+        link: 'https://www.disneyplus.com/ko-kr/movies/star-wars-the-force-awakens/3QPQWKPHuHBY'
+    },
+    {
+        title: '아이언맨 3',
+        image: 'https://upload.wikimedia.org/wikipedia/ko/f/f6/%EC%95%84%EC%9D%B4%EC%96%B8%EB%A7%A8_3_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg',
+        link: 'https://www.disneyplus.com/ko-kr/movies/iron-man-3/4S45PQd6kmm8'
+    },
+    {
+        title:'스파이더맨: 홈커밍',
+        image:'https://an2-img.amz.wtchn.net/image/v2/og3KyVVwEqnpDOKhfjlm1A.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk56STVlREV3T0RCeE9EQWlYU3dpY0NJNklpOTJNaTl6ZEc5eVpTOXBiV0ZuWlM4eE5qTXhNek15T1Rnd016azVPVFl4TURnM0luMC5IX3hnYzlQcjFaLWtyZHhFZVNsdGk5OXNFMzNMUm55SDNTNzc5NjJ1Mkxr',
+        link:'https://www.disneyplus.com/ko-kr/movies/spider-man-homecoming/5AKBzu9doVKz'
+    },
+    {
+        title:'타이탄',
+        image:'https://t1.daumcdn.net/cfile/1778A2184B69BFF50E',
+        link:'https://www.disneyplus.com/ko-kr/movies/titan-a-e/6NqowRw7A8aZ'
+    },
+    {
+        title:'백투더 퓨처',
+        image:'https://t1.daumcdn.net/movie/21c8df36be6e3ec4e4435beb09a00d7ba6ca0427',
+        link:'https://www.disneyplus.com/ko-kr/movies/back-to-the-future/5Kw5YgXyQjFU'
+    },
+    {
+        title:'서치',
+        image:'https://t1.daumcdn.net/movie/e345f9a9a4f5e0a4dee5e44bd49a86d6681c14d5',
+        link:'https://www.disneyplus.com/ko-kr/movies/search/3F1h9NkhzvU5'
+    },
+    {
+        title:'데어데블',
+        image:'https://i.namu.wiki/i/cbm7GSvZwzb9uM-rDnAaHPauJM9Tl-yp0v3WW_5pz4-6fEz1qIc3m4dTZU39fmuADxTtw4cBsAxEMwkUeSbXgQ.webp',
+        link:'https://www.disneyplus.com/ko-kr/series/daredevil/5jKSWL7ZMg50'
+    },
+    {
+        title:'말레피센트',
+        image:'https://i.namu.wiki/i/wefAapdDiSJas_Y2VeeRJDR4Uii7LBTRnQ1sPYZM17kBHZHVIwSFqH_WlB2jv1WNTscXcy2TAwfqHGdtTgx4JQ.webp',
+        link:'https://www.disneyplus.com/ko-kr/movies/maleficent/51kpvKFrtTrj'
+    }
+    // 이곳에 더 많은 액션 작품 정보를 추가할 수 있습니다.
+  ];
+
+  $(document).ready(function() {
+    setTimeout(function() {
+      $('.loading').fadeOut();
+      const randomIndex = Math.floor(Math.random() * actionWorks.length);
+      const randomActionWork = actionWorks[randomIndex];
+      $('#actionWorks-image').attr('src', randomActionWork.image);
+      $('#actionWorks-title').text(randomActionWork.title);
+      $('#actionWorks-link').attr('href', randomActionWork.link);
+    }, 4000);
+  });
+</script>
+<div class="hero text-center bg-white py-3">
+    <h1 class="text-primary fw-bold text-stroke">디즈니 플러스의 액션 작품 추천</h1>
+</div>
+<div class="card-container">
+    <div class="card">
+        <a id="actionWorks-link" href="" style="text-decoration:none; color: rgb(245, 12, 12);">
+          <img id="actionWorks-image" src="" alt="작품으로 이동">
+          <div class="card-body">
+            <a id="actionWorks-link" href="" style="text-decoration:none; color: rgb(231, 21, 21);">
+                <img id="actionWorks-image" src="" alt="작품으로 이동">
+            </a>
+            <h2 id="actionWorks-title" class="card-title" style="position: absolute; bottom: 2rem; color: white; left: 50%; transform: translateX(-50%); font-weight: bold;"></h2>
+        </div>
+      </div>
+        </a>
+    </div>
+</div>
+<div class="loading text-center">
+    <h3 class="text-secondary">분석 중...</h3>
+</div>
+</body>
+
+</html>
+

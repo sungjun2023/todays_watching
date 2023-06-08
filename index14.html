@@ -1,0 +1,147 @@
+<html lang="en">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>오늘 뭐 볼까?</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cute+Font&display=swap">
+    <link rel="stylesheet" href="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/easygpt/default.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+        <style>
+            h1 {
+         font-family: 'Cute Font', cursive;
+         font-size: 3rem;
+       }
+       body {
+         background-color: #f60707; 
+       }
+       .loading {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         font-size: 24px;
+         color: #444;
+         text-align: center;
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-color: #fff;
+         z-index: 9999;
+       }
+       .card {
+         width: 500px;
+         height: 500px;
+         margin: 0 auto;
+         border-radius: 1.5rem;
+         overflow: hidden;
+         margin-top: 2rem;
+         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+       }
+       .card img {
+         max-width: 100%;
+         max-height: 100%;
+         object-fit: cover;
+         border-radius: 1.5rem 1.5rem 0 0;
+       }
+       .card-body {
+         padding: 2rem;
+         text-align: center;
+         background-color: #FFF;
+       }
+       .btn {
+         background-color: #853030; /* 빨간색 */
+         color: #FFF;
+         font-weight: bold;
+         border-radius: 2rem;
+         padding: 1rem 2rem;
+         margin-top: 2rem;
+         border: none;
+       }
+       .btn:hover {
+         background-color: #E57373; /* 연한 빨간색 */
+         transition: background-color 0.2s;
+       }
+       .card:hover {
+         transform: scale(1.05);
+         transition: transform 0.2s;
+       }
+       .netflix-text {
+         color: red;
+         font-family: 'Cute Font', cursive;
+         font-size: 3rem;
+       }
+     </style>
+</head>
+<body>
+    <div class="hero text-center bg-white py-3">
+        <h1 class="text-primary fw-bold text-stroke">오늘 뭐 볼까?</h1>
+        <h3 class="text-secondary">선택장애를 위한 ott 선택 서비스</h3>
+    </div>
+    <div class="hero text-center bg-white py-3">
+        <h1 class="text-primary fw-bold text-stroke"><span class=netflix-text>넷플릭스</span>의 액션 작품 추천</h1>
+<div class="card-container">
+    <div class="card">
+        <a id="actionWorks-link" href="" style="text-decoration:none; color: black;">
+            <img id="actionWorks-image" src="" alt="작품으로 이동">
+            <div class="card-body">
+                <h2 id="actionWorks-title" class="card-title" style="position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); font-weight: bold;"></h2>
+            </div>
+        </a>
+    </div>
+</div>
+<script>
+  const actionWorks = [
+    {
+      title: '익스트랙션',
+      image: 'https://th.bing.com/th/id/OIP.EInu8Y-04n8s5umLJuLGWAHaK-?pid=ImgDet&rs=1',
+      link: 'https://www.netflix.com/kr/title/80230399'
+    },
+    {
+      title: '시카리오: 데이 오브 솔다도',
+      image: 'https://an2-img.amz.wtchn.net/image/v2/AvXjNPf1_hMZKpVO19juQQ.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk56STVlREV3T0RCeE9EQWlYU3dpY0NJNklpOTJNaTl6ZEc5eVpTOXBiV0ZuWlM4eE5qTXhNREV5T0RNMU9EazROak0xTVRJeUluMC40WnZmUU5mTU4wTlRQcTZIUy02bmpsR20ycVJ1V3hiMmZJZ0hWMlRjRzdN',
+      link: 'https://www.netflix.com/kr/title/80231321'
+    },
+    {
+      title: '노 바디',
+      image: 'https://www.newdvdreleasedates.com/images/posters/large/nobody-2021-02.jpg',
+      link: 'https://www.netflix.com/gb/title/81207977'
+    },
+    {
+      title: '악인전',
+      image: 'https://blog.kakaocdn.net/dn/bMDSqP/btq4jOaLdH3/nmolEkjBOEJKtBAmr9o8nk/img.png',
+      link: 'https://www.netflix.com/kr/title/81078578'
+    },
+    {
+      title: '모가디슈',
+      image: 'https://mblogthumb-phinf.pstatic.net/MjAyMTEyMTZfMjQg/MDAxNjM5NjYyMTA1OTk2.Ea1tICgY14Bz85d8J56-YhUJbLZqjitI30AQEalxgbgg.HtN6vHuc-oM9XyBviJs7T4RAcHkUVxsYYMTTcd7yCCkg.JPEG.dongi0508/5.jpeg?type=w800',
+      link: 'https://www.netflix.com/kr/title/81495859'
+    },
+    {
+      title: '귀멸의 칼날:무한 열차편',
+      image: 'https://movie-phinf.pstatic.net/20210126_174/1611638248803840HH_JPEG/movie_image.jpg',
+      link: 'https://www.netflix.com/kr/title/81504496'
+    }
+  ];
+$(document).ready(function() {
+// "분석 중..." 메시지가 4초 후에 사라지도록 설정합니다.
+setTimeout(function() {
+$('.loading').fadeOut();
+const randomIndex = Math.floor(Math.random() * actionWorks.length);
+const randomActionWork = actionWorks[randomIndex];
+$('#actionWorks-image').attr('src', randomActionWork.image);
+$('#actionWorks-title').text(randomActionWork.title);
+$('#actionWorks-link').attr('href', randomActionWork.link);
+}, 4000);
+});
+</script>
+<div class="loading text-center">
+    <h3 class="text-secondary">분석 중...</h3>
+</div>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<html lang="en">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>오늘 뭐 볼까?</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cute+Font&display=swap">
+    <link rel="stylesheet" href="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/easygpt/default.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+        <style>
+            h1 {
+         font-family: 'Cute Font', cursive;
+         font-size: 3rem;
+       }
+       body {
+         background-color: #f82206; /* 분홍색 */
+       }
+       .loading {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         font-size: 24px;
+         color: #444;
+         text-align: center;
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-color: #fff;
+         z-index: 9999;
+       }
+       .card {
+         width: 500px;
+         height: 500px;
+         margin: 0 auto;
+         border-radius: 1.5rem;
+         overflow: hidden;
+         margin-top: 2rem;
+         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+       }
+       .card img {
+         max-width: 100%;
+         max-height: 100%;
+         object-fit: cover;
+         border-radius: 1.5rem 1.5rem 0 0;
+       }
+       .card-body {
+         padding: 2rem;
+         text-align: center;
+         background-color: #FFF;
+       }
+       .btn {
+         background-color: #853030; /* 빨간색 */
+         color: #FFF;
+         font-weight: bold;
+         border-radius: 2rem;
+         padding: 1rem 2rem;
+         margin-top: 2rem;
+         border: none;
+       }
+       .btn:hover {
+         background-color: #E57373; /* 연한 빨간색 */
+         transition: background-color 0.2s;
+       }
+       .card:hover {
+         transform: scale(1.05);
+         transition: transform 0.2s;
+       }
+     </style>
+</head>
+<body>
+    <div class="hero text-center bg-white py-3">
+        <h1 class="text-primary fw-bold text-stroke">오늘 뭐 볼까?</h1>
+        <h3 class="text-secondary">선택장애를 위한 ott 선택 서비스</h3>
+    </div>
+<div class="hero text-center bg-white py-3">
+    <h1 class="text-primary fw-bold text-stroke">디즈니 플러스의 19장르 작품 추천</h1>
+</div>
+<div class="card-container">
+    <div class="card">
+        <a id="genreWorks-link" href="" style="text-decoration:none; color: black;">
+            <img id="genreWorks-image" src="" alt="작품으로 이동">
+            <div class="card-body">
+                <h2 id="genreWorks-title" class="card-title" style="position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); font-weight: bold;"></h2>
+            </div>
+        </a>
+    </div>
+</div>
+<script>
+  const genreWorks = [
+    {
+      title: '워킹데드 시리즈',
+      image: 'https://storage.googleapis.com/cdn.media.bluedot.so/bluedot.jeremyletter/2022/05/waling-disney.jpeg',
+      link: 'https://www.disneyplus.com/ko-kr/series/the-walking-dead/6FPLfTcQrTpy'
+    },
+    {
+      title: '팸 앤 토미',
+      image: 'https://i.ytimg.com/vi/WkHEZ0Yj1rI/mqdefault.jpg',
+      link: 'https://www.disneyplus.com/ko-kr/series/pam-tommy/1N8HLsr8QjUj'
+    },
+    {
+      title: '데드풀1',
+      image: 'https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/AA3AFD82111DA258DBF01D372F31066AF11B362C2F3EEA9B1618D25CAE4EE445/scale?width=506&aspectRatio=2.00&format=jpeg',
+      link: 'https://www.disneyplus.com/ko-kr/movies/deadpool/3Kh13Lrb0Pnv'
+    },
+    {
+      title: '데드풀2',
+      image: 'https://blog.kakaocdn.net/dn/pVEwY/btrvngzZFAz/Yr5NLrFeYwN0h0zZpNN5PK/img.jpg',
+      link: 'https://www.disneyplus.com/ko-kr/movies/deadpool-2/LSuXSQ3S5mxU'
+    },
+    {
+      title: '섹스 어필',
+      image: 'https://bot-log-product.s3.ap-northeast-2.amazonaws.com/product/disney/still/2XourrVHWKhq-%EC%84%B9%EC%8A%A4%EC%96%B4%ED%95%84.png',
+      link: 'https://www.disneyplus.com/ko-kr/movies/sex-appeal/2XourrVHWKhq'
+    }
+    
+  ];
+
+  $(document).ready(function() {
+    // "분석 중..." 메시지가 4초 후에 사라지도록 설정합니다.
+    setTimeout(function() {
+      $('.loading').fadeOut();
+      const randomIndex = Math.floor(Math.random() * genreWorks.length);
+      const randomGenreWork = genreWorks[randomIndex];
+      $('#genreWorks-image').attr('src', randomGenreWork.image);
+      $('#genreWorks-title').text(randomGenreWork.title);
+      $('#genreWorks-link').attr('href', randomGenreWork.link);
+    }, 4000);
+  });
+</script>
+<div class="loading text-center">
+    <h3 class="text-secondary">분석 중...</h3>
+</div>
+</body>
+</html>
